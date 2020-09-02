@@ -21,7 +21,7 @@ class AmountBar extends React.Component {
           <form onSubmit={this.onFormSubmit} className="ui form">
             <div className="field">
               <label>Enter $ amount </label>
-              <input type="number" onChange={this.onAmountChange} />
+              <input type="number" min="0" onChange={this.onAmountChange} />
             </div>
           </form>
         </div>

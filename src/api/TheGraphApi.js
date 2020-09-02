@@ -5,7 +5,7 @@ const API_URL =
 // querry to get first 1000 pool details using thegraph api
 const POOL_STATS_QUERY = {
   query:
-    "{\n  savingsPools(first: 1000) {\n    poolToken {\n      name\n    }\n    balance {\n      amount\n    }\n    apr {\n      amount\n    }\n    tokens {\n      id\n      symbol\n      decimals\n    }\n  }\n}\n",
+    "{\n\n  savingsPools(first: 1000) {\n    poolToken {\n      name\n    }\n    balance {\n      amount\n    }\n    apr {\n      id\n      amount\n      date\n      duration\n      pool {\n        id\n      }\n    }\n    rewards{\n      id\n      amount\n      date\n    }\n    tokens {\n      id\n      symbol\n      decimals\n    }\n    rewardTokens{\n      id\n      name\n      symbol\n      \n    }\n    \n    \n    \n  }\n}\n",
   variables: null,
 };
 
