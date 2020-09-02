@@ -20,10 +20,13 @@ class AmountBar extends React.Component {
         <div className="ui segment">
           <form onSubmit={this.onFormSubmit} className="ui form">
             <div className="field">
-              <label>Enter $ amount </label>
+              <label>Enter USD amount </label>
               <input type="number" min="0" onChange={this.onAmountChange} />
             </div>
           </form>
+        </div>
+        <div>
+          <h2>You Deposit: $ {(this.state.amount / 1).toLocaleString()}</h2>
         </div>
       </div>
     );
