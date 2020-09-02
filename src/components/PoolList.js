@@ -9,6 +9,7 @@ const PoolList = (props) => {
         key={asset.poolToken.name}
         alt={asset.poolToken.name}
         pool={asset}
+        amount={props.amount}
       />
     );
   });
