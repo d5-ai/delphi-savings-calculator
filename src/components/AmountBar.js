@@ -8,6 +8,11 @@ class AmountBar extends React.Component {
     this.props.onSubmit(this.state.amount);
   };
 
+  onAmountChange = (event) => {
+    this.setState({ amount: event.target.value });
+    this.props.onSubmit(this.state.amount);
+  };
+
   render() {
     return (
       <div>
@@ -15,10 +20,7 @@ class AmountBar extends React.Component {
           <form onSubmit={this.onFormSubmit} className="ui form">
             <div className="field">
               <label>Enter $ amount </label>
-              <input
-                type="number"
-                onChange={(e) => this.setState({ amount: e.target.value })}
-              />
+              <input type="number" onChange={this.onAmountChange} />
             </div>
           </form>
         </div>
