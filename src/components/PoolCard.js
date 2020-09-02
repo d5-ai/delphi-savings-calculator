@@ -11,21 +11,33 @@ const PoolCard = (props) => {
     const newWindow = window.open(url, "_blank", "noopener,noreferrer");
     if (newWindow) newWindow.opener = null;
   };
+  // pool name
   const name = props.pool.poolToken.name;
+  // token list
   const tokens = props.pool.tokens;
-  const rewardTokens = props.pool.rewardTokens;
-  const poolId = props.pool.apr.pool.id;
-  // this is the savings url
-  const url = `${APP_URL}${poolId}`;
-  // const rewards = props.pool.rewards;
-
-  const rewardTokenNames = rewardTokens.map((token) => token.symbol);
+  // extract name from tokens
   const tokenNames = tokens.map((token) => token.symbol);
-  // this does not traslate into APY
-  // TODO: fix this
+  // get reward tokens
+  const rewardTokens = props.pool.rewardTokens;
+  // extract name from reward tokens
+  const rewardTokenNames = rewardTokens.map((token) => token.symbol);
+  // list of reward amount,date,id
+  const rewards = props.pool.rewards;
+  // TODO: parse into more useful info (currently just displays the list of amounts (date ignored))
+  const rewardList = rewards.map((reward) =>
+    (reward.amount / BALANCE_DECIMALS).toLocaleString()
+  );
+  // get pool id
+  const poolId = props.pool.apr.pool.id;
+  // this is the mainnet dapp url for the pool
+  const url = `${APP_URL}${poolId}`;
+  // TODO: this should be parsed differently,  this does not traslate into APY
   const apr = props.pool.apr.amount / APR_DECIMALS;
-  const balance = props.pool.balance.amount / BALANCE_DECIMALS;
-  const amount = props.amount / 1;
+  // current pool balance (liquidity)
+  const liquidity = props.pool.balance.amount / BALANCE_DECIMALS;
+  // user defined amount passed from parent
+  const amount = props.amount;
+  // caclulated using amount and apr, TODO: use apy
   const yearly_earnings = (amount * apr) / 100;
   return (
     <div
@@ -42,13 +54,16 @@ const PoolCard = (props) => {
           APY:
           <b>{apr.toLocaleString()}% </b>
           Liquidity:
-          <b>${balance.toLocaleString()}</b>
+          <b>${liquidity.toLocaleString()}</b>
         </div>
         <div>
           Deposit:
           <b>{tokenNames.toString()} </b>
           RewardTokens:
           <b>{rewardTokenNames.toString()}</b>
+        </div>
+        <div style={{ fontSize: "0.78em" }}>
+          Historical Rewards: <b>{rewardList.toString()}</b>
         </div>
         <div>
           Yearly Profit:
