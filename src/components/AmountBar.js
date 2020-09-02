@@ -5,12 +5,13 @@ class AmountBar extends React.Component {
 
   onFormSubmit = (event) => {
     event.preventDefault();
-    this.props.onSubmit(this.state.amount);
   };
 
   onAmountChange = (event) => {
+    // send amount up to App.js component
+    this.props.onSubmit(event.target.value);
+    // update state
     this.setState({ amount: event.target.value });
-    this.props.onSubmit(this.state.amount);
   };
 
   render() {
