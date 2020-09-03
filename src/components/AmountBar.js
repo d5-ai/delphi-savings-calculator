@@ -28,12 +28,7 @@ class AmountBar extends React.Component {
                 type="number"
                 min="0"
                 onChange={this.onAmountChange}
-                style={{
-                  textAlign: "right",
-                  fontSize: 15,
-                  height: "50px",
-                  marginTop: "20px",
-                }}
+                style={{ textAlign: "right", fontSize: 15 }}
               />
             </div>
           </form>
