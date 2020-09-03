@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Overview from "./Overview";
 import PoolList from "./PoolList";
 import AmountBar from "./AmountBar";
-import getPoolAPYDetails from "../api/TheGraphApi";
+import GraphApiInterface from "../api/TheGraphApi";
+
+const API = new GraphApiInterface();
 
 class App extends Component {
   state = {
@@ -10,6 +12,9 @@ class App extends Component {
     poolStats: [],
     // stores user input Amount
     userAmount: 0,
+    // apr decimals
+    aprDecimals: 8,
+    activeMembers: 0,
   };
 
   // callback for when user submits amount
@@ -17,16 +22,34 @@ class App extends Component {
     this.setState({ userAmount: amount });
   };
 
-  // gets pool stats and sets state
-  async updatePoolSats() {
-    const poolDetails = await getPoolAPYDetails();
-    this.setState({ poolStats: poolDetails.data.savingsPools });
-    console.log(poolDetails.data.savingsPools);
+  // gets active members and updates state
+  async updateActiveMemberCount() {
+    const activeMembers = await API.getActiveMembersCount();
+    this.setState({ activeMembers });
   }
 
+  // gets pool stats and sets state
+  async updatePoolSats() {
+    const poolStats = await API.getDetailedPoolStats();
+    this.setState({ poolStats });
+  }
+
+  // gets aprDecimals and sets state
+  async updateAprDecimals() {
+    const aprDecimals = await API.getAprDecimals();
+    this.setState({ aprDecimals });
+  }
   // load pool stats
   async componentDidMount() {
+    await this.updateAprDecimals();
+    await this.updateActiveMemberCount();
     await this.updatePoolSats();
+
+    // await API.getRewardDetails(
+    //   "0x08ddb58d31c08242cd444bb5b43f7d2c6bca0396",
+    //   "1598517315"
+    // );
+
     // run every 20 seconds
     setInterval(this.updatePoolSats.bind(this), 20000);
   }
@@ -40,13 +63,17 @@ class App extends Component {
           <br /> Delphi Akropolis Savings's Calculator
         </h1>
         <hr />
-        <Overview />
+        <Overview activeMembers={this.state.activeMembers} />
         <hr />
         <div className="ui container">
           <AmountBar onSubmit={this.onAmountSubmit} />
         </div>
         <hr />
-        <PoolList pools={this.state.poolStats} amount={this.state.userAmount} />
+        <PoolList
+          pools={this.state.poolStats}
+          amount={this.state.userAmount}
+          aprDecimals={this.state.aprDecimals}
+        />
       </div>
     );
   }

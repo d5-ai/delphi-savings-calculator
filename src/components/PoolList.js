@@ -10,6 +10,7 @@ const PoolList = (props) => {
         alt={asset.poolToken.name}
         pool={asset}
         amount={props.amount}
+        aprDecimals={props.aprDecimals}
       />
     );
   });

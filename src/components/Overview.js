@@ -1,6 +1,6 @@
 import React from "react";
 
-const Overview = () => {
+const Overview = (props) => {
   return (
     <div>
       <h3>Overview</h3>
@@ -16,6 +16,7 @@ const Overview = () => {
       <a href="https://akropolis.io/" target="_blank" rel="noopener noreferrer">
         Akropolis
       </a>
+      <div>There are currently {props.activeMembers} active members</div>
     </div>
   );
 };
