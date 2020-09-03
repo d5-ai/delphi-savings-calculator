@@ -44,12 +44,6 @@ class App extends Component {
     await this.updateAprDecimals();
     await this.updateActiveMemberCount();
     await this.updatePoolSats();
-
-    // await API.getRewardDetails(
-    //   "0x08ddb58d31c08242cd444bb5b43f7d2c6bca0396",
-    //   "1598517315"
-    // );
-
     // run every 20 seconds
     setInterval(this.updatePoolSats.bind(this), 20000);
   }
@@ -73,6 +67,7 @@ class App extends Component {
           pools={this.state.poolStats}
           amount={this.state.userAmount}
           aprDecimals={this.state.aprDecimals}
+          api={API}
         />
       </div>
     );

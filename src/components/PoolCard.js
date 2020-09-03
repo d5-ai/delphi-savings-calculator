@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BN from "bn.js";
 
 const BALANCE_DECIMALS = 1000000000000000000;
@@ -17,18 +17,30 @@ function calcAvg(aprHistory) {
 
 // This is part of the AssetList (displays each Asset)
 const PoolCard = (props) => {
+  const [rewards, setRewards] = useState(null);
+
+  async function getRewards() {
+    const rewards = await props.api.getRewardDetails(
+      props.pool.aprHistory[0].pool.id
+    );
+    console.log(rewards);
+    setRewards(rewards);
+  }
+  useEffect(() => {
+    getRewards();
+  }, []);
   // open url in new tab
   const openInNewTab = (url) => {
     const newWindow = window.open(url, "_blank", "noopener,noreferrer");
     if (newWindow) newWindow.opener = null;
   };
+
   // pool name
   const name = props.pool.poolToken.name;
   // apr decimals
   const aprDecimals = Math.pow(10, props.aprDecimals);
   const aprHistory = props.pool.aprHistory;
   const apy = (calcAvg(aprHistory) * 100) / aprDecimals;
-
   // token list
   const tokens = props.pool.tokens;
   // extract name from tokens
@@ -47,13 +59,6 @@ const PoolCard = (props) => {
   const amount = props.amount;
   // // caclulated using amount and apr, TODO: use apy
   const yearly_earnings = (amount * apy) / 100;
-
-  // // list of reward amount,date,id
-  // const rewards = props.pool.rewards;
-  // // TODO: parse into more useful info (currently just displays the list of amounts (date ignored))
-  // const rewardList = rewards.map((reward) =>
-  //   (reward.amount / BALANCE_DECIMALS).toLocaleString()
-  // );
 
   return (
     <div
@@ -78,9 +83,9 @@ const PoolCard = (props) => {
           RewardTokens:
           <b>{rewardTokenNames.toString()}</b>
         </div>
-        {/* <div style={{ fontSize: "0.78em" }}>
-          Historical Rewards: <b>{rewardList.toString()}</b>
-        </div> */}
+        <div style={{ fontSize: "0.78em" }}>
+          {/* Historical Rewards: <b>{rewards.toString()}</b> */}
+        </div>
         <div>
           Yearly Profit:
           <b>${yearly_earnings.toLocaleString()}</b>

@@ -11,6 +11,7 @@ const PoolList = (props) => {
         pool={asset}
         amount={props.amount}
         aprDecimals={props.aprDecimals}
+        api={props.api}
       />
     );
   });

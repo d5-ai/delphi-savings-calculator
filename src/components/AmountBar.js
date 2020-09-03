@@ -16,12 +16,23 @@ class AmountBar extends React.Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{
+          width: "500px",
+          margin: "0 auto",
+          padding: "20px",
+        }}
+      >
         <div className="ui segment">
           <form onSubmit={this.onFormSubmit} className="ui form">
             <div className="field">
               <label>Enter USD amount </label>
-              <input type="number" min="0" onChange={this.onAmountChange} />
+              <input
+                type="number"
+                min="0"
+                onChange={this.onAmountChange}
+                style={{ textAlign: "right" }}
+              />
             </div>
           </form>
         </div>

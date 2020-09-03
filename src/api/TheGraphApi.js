@@ -30,12 +30,14 @@ class GraphApiInterface {
     );
     return response.data.data.subgraphConfig.aprDecimals;
   }
-  async getRewardDetails(poolAddress, date) {
+  async getRewardDetails(poolAddress) {
+    const now = new Date().getTime() / 1000;
+    const lastWeek = parseInt(now - 60 * 60 * 24 * 7);
     const REWARDS_QUERY = {
-      query: `{srewards(first: 1000, orderBy: date, orderDirection: desc, where: {pool: "${poolAddress}", date_gt: "${date}"}){pool{poolToken{name}}token{id name symbol decimals} amount date}}`,
+      query: `{srewards(first: 1000, orderBy: date, orderDirection: desc, where: {pool: "${poolAddress}", date_gt: "${lastWeek}"}){pool{poolToken{name}}token{id name symbol decimals} amount date}}`,
     };
     const response = await axios.post(this.api_url, REWARDS_QUERY);
-    return response.data.data;
+    return response.data.data.srewards;
   }
 
   async getDetailedPoolStats() {
