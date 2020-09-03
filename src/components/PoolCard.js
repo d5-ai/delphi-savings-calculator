@@ -8,27 +8,52 @@ const APP_URL = "https://delphi.akropolis.io/savings/pool/";
 function calcAvg(aprHistory) {
   let sum = new BN(0);
   let weights = new BN(0);
-  aprHistory.map((apr) => {
+  aprHistory.forEach((apr) => {
     sum = sum.add(new BN(apr.amount).mul(new BN(apr.duration)));
     weights = weights.add(new BN(apr.duration));
   });
   return sum.div(weights);
 }
 
-// This is part of the AssetList (displays each Asset)
-const PoolCard = (props) => {
-  const [rewards, setRewards] = useState(null);
+//TODO: add weekly calculation
+// takes srewards query output from subgraph + rewardTokenNames to rewards weekly
+function calcWeeklyRewardsComplex(srewards, rewardTokenNames) {
+  let sum = {};
+  rewardTokenNames.forEach((token) => {
+    sum[token] = new BN(0);
+  });
+  let decimals = {};
+  let result = {};
 
+  srewards.forEach((reward) => {
+    sum[reward.token.symbol] = sum[reward.token.symbol].add(
+      new BN(reward.amount)
+    );
+    decimals[reward.token.symbol] = Math.pow(10, reward.token.decimals);
+  });
+
+  rewardTokenNames.forEach((token) => {
+    result[token] = (sum[token] / decimals[token]).toLocaleString();
+  });
+  return JSON.stringify(result);
+}
+
+const PoolCard = (props) => {
+  // each card uses this to grab rewards and set
+  const [rewards, setRewards] = useState(null);
+  // async function to grab rewards
   async function getRewards() {
     const rewards = await props.api.getRewardDetails(
       props.pool.aprHistory[0].pool.id
     );
-    console.log(rewards);
     setRewards(rewards);
   }
+  // run the function once
+
   useEffect(() => {
     getRewards();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps,
+  }, [props]);
   // open url in new tab
   const openInNewTab = (url) => {
     const newWindow = window.open(url, "_blank", "noopener,noreferrer");
@@ -59,7 +84,11 @@ const PoolCard = (props) => {
   const amount = props.amount;
   // // caclulated using amount and apr, TODO: use apy
   const yearly_earnings = (amount * apy) / 100;
-
+  let weeklyRewardTokens = "";
+  if (rewards && rewards[0]) {
+    // reward
+    weeklyRewardTokens = calcWeeklyRewardsComplex(rewards, rewardTokenNames);
+  }
   return (
     <div
       className="ui segment"
@@ -75,20 +104,18 @@ const PoolCard = (props) => {
           APY:
           <b>{apy.toLocaleString()}% </b>
           Liquidity:
-          <b>${liquidity.toLocaleString()}</b>
-        </div>
-        <div>
+          <b>${liquidity.toLocaleString()} </b>
           Deposit:
           <b>{tokenNames.toString()} </b>
-          RewardTokens:
-          <b>{rewardTokenNames.toString()}</b>
         </div>
-        <div style={{ fontSize: "0.78em" }}>
-          {/* Historical Rewards: <b>{rewards.toString()}</b> */}
+        <div style={{ fontSize: "0.78em" }}></div>
+        <div>
+          Weekly Total Pool Rewards:
+          <b>{weeklyRewardTokens.toString()}</b>
         </div>
         <div>
           Yearly Profit:
-          <b>${yearly_earnings.toLocaleString()}</b>
+          <b>{yearly_earnings.toLocaleString()}</b>
         </div>
       </div>
     </div>

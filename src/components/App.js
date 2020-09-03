@@ -30,6 +30,7 @@ class App extends Component {
 
   // gets pool stats and sets state
   async updatePoolSats() {
+    console.log("Fetching pool data");
     const poolStats = await API.getDetailedPoolStats();
     this.setState({ poolStats });
   }

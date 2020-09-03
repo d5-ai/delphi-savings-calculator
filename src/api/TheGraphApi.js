@@ -46,8 +46,6 @@ class GraphApiInterface {
       this.api_url,
       this.queries.POOL_STATS_DETAILED
     );
-    console.log(response.data.data.savingsPools);
-
     return response.data.data.savingsPools;
   }
 
