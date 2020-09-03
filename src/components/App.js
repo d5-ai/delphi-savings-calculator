@@ -64,6 +64,7 @@ class App extends Component {
           <AmountBar onSubmit={this.onAmountSubmit} />
         </div>
         <hr />
+
         <PoolList
           pools={this.state.poolStats}
           amount={this.state.userAmount}

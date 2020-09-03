@@ -16,7 +16,22 @@ const PoolList = (props) => {
     );
   });
 
-  return <div className="ui relaxed divided list">{renderList}</div>;
+  return (
+    <table class="ui celled table">
+      {" "}
+      <thead>
+        <tr>
+          <th>Pool Name</th>
+          <th className="sorted ascending">APY</th>
+          <th>Liquidity</th>
+          <th> Deposit Currencies</th>
+          <th>Weekly Pool Rewards</th>
+          <th>Yearly Profit</th>
+        </tr>
+      </thead>
+      <tbody>{renderList}</tbody>
+    </table>
+  );
 };
 
 export default PoolList;
