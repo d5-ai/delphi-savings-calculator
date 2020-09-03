@@ -16,13 +16,7 @@ class AmountBar extends React.Component {
 
   render() {
     return (
-      <div
-        style={{
-          width: "500px",
-          margin: "0 auto",
-          padding: "20px",
-        }}
-      >
+      <div>
         <div className="ui segment">
           <form onSubmit={this.onFormSubmit} className="ui form">
             <div className="field">
