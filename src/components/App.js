@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Overview from "./Overview";
-import PoolList from "./PoolList";
+import PoolTable from "./PoolTable";
 import AmountBar from "./AmountBar";
 import GraphApiInterface from "../api/TheGraphApi";
 
@@ -65,7 +65,7 @@ class App extends Component {
         </div>
         <hr />
 
-        <PoolList
+        <PoolTable
           pools={this.state.poolStats}
           amount={this.state.userAmount}
           aprDecimals={this.state.aprDecimals}

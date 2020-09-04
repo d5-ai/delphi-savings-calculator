@@ -38,7 +38,7 @@ function calcWeeklyRewardsComplex(srewards, rewardTokenNames) {
   return JSON.stringify(result);
 }
 
-const PoolCard = (props) => {
+const PoolRow = (props) => {
   // each card uses this to grab rewards and set
   const [rewards, setRewards] = useState(null);
   // async function to grab rewards
@@ -88,50 +88,37 @@ const PoolCard = (props) => {
   if (rewards && rewards[0]) {
     // reward
     weeklyRewardTokens = calcWeeklyRewardsComplex(rewards, rewardTokenNames);
+    console.log(weeklyRewardTokens);
   }
   return (
-    <tr>
+    <tr
+      onClick={() => {
+        openInNewTab(url);
+      }}
+    >
       <td dataLabel="Pool Name"> {name}</td>
-      <td dataLabel="APY"> {apy.toLocaleString()}</td>
-      <td dataLabel="Liquidity"> {liquidity.toLocaleString()}</td>
+      <td dataLabel="APY">
+        {apy.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}
+      </td>
+      <td dataLabel="Liquidity">
+        {liquidity.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}
+      </td>
       <td dataLabel="Deposit Currencies"> {tokenNames.toString()}</td>
       <td dataLabel="Weekly Pool Rewards"> {weeklyRewardTokens.toString()}</td>
-      <td dataLabel="Yearly Profit"> {yearly_earnings.toLocaleString()}</td>
+      <td dataLabel="Yearly Profit">
+        {yearly_earnings.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </td>
     </tr>
-
-    // <div
-    //   className="ui segment"
-    //   onClick={() => {
-    //     openInNewTab(url);
-    //   }}
-    // >
-    //   <div class="ui six column very grid">
-    //     <div className="column header">
-    //       <h3>{name}</h3>
-    //     </div>
-    //     <div className="column">
-    //       APY:
-    //       <b>{apy.toLocaleString()}% </b>
-    //     </div>
-    //     <div className="column">
-    //       Liquidity:
-    //       <b>${liquidity.toLocaleString()} </b>
-    //     </div>
-    //     <div className="column">
-    //       Deposit:
-    //       <b>{tokenNames.toString()} </b>
-    //     </div>
-    //     <div className="column">
-    //       Weekly Total Pool Rewards:
-    //       <b>{weeklyRewardTokens.toString()}</b>
-    //     </div>
-    //     <div className="column">
-    //       Yearly Profit:
-    //       <b>{yearly_earnings.toLocaleString()}</b>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 
-export default PoolCard;
+export default PoolRow;
